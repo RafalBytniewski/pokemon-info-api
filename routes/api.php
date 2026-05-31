@@ -12,3 +12,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/banned', [BannedPokemonController::class, 'index']);
 Route::post('/banned', [BannedPokemonController::class, 'store']);
+Route::delete('/banned/{id}', [BannedPokemonController::class, 'destroy']);
