@@ -1,15 +1,11 @@
 <?php
 
 use App\Http\Controllers\BannedPokemonController;
-/* use Illuminate\Http\Request; */
+use App\Http\Middleware\CheckSecretKey;
 use Illuminate\Support\Facades\Route;
 
-/* Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
- */
-
-
-Route::get('/banned', [BannedPokemonController::class, 'index']);
-Route::post('/banned', [BannedPokemonController::class, 'store']);
-Route::delete('/banned/{id}', [BannedPokemonController::class, 'destroy']);
+Route::middleware([CheckSecretKey::class])->group(function() {
+    Route::get('/banned', [BannedPokemonController::class, 'index'])->middleware(CheckSecretKey::class);
+    Route::post('/banned', [BannedPokemonController::class, 'store']);
+    Route::delete('/banned/{id}', [BannedPokemonController::class, 'destroy']);
+});
