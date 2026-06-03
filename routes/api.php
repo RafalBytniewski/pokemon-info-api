@@ -10,4 +10,4 @@ Route::middleware([CheckSecretKey::class])->group(function() {
     Route::post('/banned', [BannedPokemonController::class, 'store']);
     Route::delete('/banned/{id}', [BannedPokemonController::class, 'destroy']);
 });
-Route::get('/pokemon', [PokemonInfoController:: class, 'index']);
+Route::get('/pokemon', [PokemonInfoController:: class, 'getPokemonInfo']);

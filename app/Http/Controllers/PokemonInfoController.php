@@ -8,28 +8,33 @@ use Illuminate\Support\Facades\Http;
 
 class PokemonInfoController extends Controller
 {
-    public function index(Request $request)
+    public function getPokemonInfo(Request $request)
     {
-        
+
         $validated = $request->validate([
-            'pokemons' => ['required','array','min:1'],
+            'pokemons' => ['required', 'array', 'min:1'],
             'pokemons.*' => ['required', 'string', 'distinct']
         ]);
 
-        $bannedPokemons = BannedPokemon::pluck('name')->toArray();
-        $pokemons = array_diff($validated['pokemons'], $bannedPokemons);
-
+        $pokemons = $validated['pokemons'];
         $result = [];
-        foreach($pokemons as $pokemon){
+
+        foreach ($pokemons as $pokemon) {
             $pokemonName = strtolower($pokemon);
+            if (BannedPokemon::where('name', $pokemonName)->exists()) {
+                $result[] = [
+                    'pokemon' => $pokemonName,
+                    'message' => "Pokemon $pokemonName is banned"
+                ];
+                continue;
+            }
             $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$pokemonName}");
 
-            if($response->failed()){
-            $result[] = [
+            if ($response->failed()) {
+                $result[] = [
                     'name' => $pokemonName,
                     'error' => 'Pokemon not found',
                 ];
-
                 continue;
             }
 

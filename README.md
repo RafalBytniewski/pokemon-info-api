@@ -117,4 +117,74 @@ http://127.0.0.1:8000
 ```txt
 http://localhost:8000/api
 ```
+
+### Endpoints
+
+#### Get banned Pokemon
+**Request**
+```txt
+GET /banned
+```
+
+**Headers**
+```txt
+- X-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+```
+
+**Body**
+``` json
+
+```
+
+**Example Response**
+
+```json
+
+```
+
+#### Add banned Pokemon
+**Request**
+```txt
+POST /banned
+```
+
+**Headers**
+```txt
+- X-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+```
+
+**Body**
+``` json
+{
+  "name": "pikachu"
+}
+```
+
+**Example Response**
+
+```json
+
+```
+
+#### Delete banned Pokemon
+**Request**
+```txt
+DELETE /banned
+```
+
+**Headers**
+
+- X-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+
+**Body**
+
+{
+  "name": "pikachu"
+}
+
+**Example Response**
+
 ---
