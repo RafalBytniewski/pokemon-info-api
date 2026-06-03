@@ -120,30 +120,43 @@ http://localhost:8000/api
 
 ### Endpoints
 
-#### Get banned Pokemon
+#### Get banned pokemons
+
 **Request**
+
 ```txt
 GET /banned
 ```
 
 **Headers**
+
 ```txt
-- X-SECRET-KEY: your_secret_key
+- X-SUPER-SECRET-KEY: your_secret_key
 - Content-Type: application/json
 ```
 
 **Body**
 ``` json
-
+-
 ```
 
 **Example Response**
 
 ```json
-
+{
+    "data": [
+        {
+            "id": 7,
+            "name": "pikachu",
+            "created_at": "2026-06-01T03:10:17.000000Z",
+            "updated_at": "2026-06-01T03:10:17.000000Z"
+        }
+    ]
+}
 ```
 
-#### Add banned Pokemon
+#### Add banned pokemon
+
 **Request**
 ```txt
 POST /banned
@@ -151,12 +164,47 @@ POST /banned
 
 **Headers**
 ```txt
-- X-SECRET-KEY: your_secret_key
+- X-SUPER-SECRET-KEY: your_secret_key
 - Content-Type: application/json
 ```
 
 **Body**
 ``` json
+{
+    "name": "Charizard"
+}
+```
+
+**Example Response**
+
+```json
+{
+    "message": "Pokemon added to banned",
+    "data": {
+        "name": "charizard",
+        "updated_at": "2026-06-03T03:59:57.000000Z",
+        "created_at": "2026-06-03T03:59:57.000000Z",
+        "id": 8
+    }
+}
+```
+
+#### Delete banned pokemon
+
+**Request**
+
+```txt
+DELETE /banned
+```
+
+**Headers**
+
+- X-SUPER-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+
+**Body**
+
+```json
 {
   "name": "pikachu"
 }
@@ -165,26 +213,55 @@ POST /banned
 **Example Response**
 
 ```json
-
+{
+    "message": "Deleted Succesfully"
+}
 ```
 
-#### Delete banned Pokemon
+#### Get pokemon info
+
 **Request**
 ```txt
-DELETE /banned
+GET /pokemon
 ```
 
 **Headers**
 
-- X-SECRET-KEY: your_secret_key
+- X-SUPER-SECRET-KEY: your_secret_key
 - Content-Type: application/json
 
 **Body**
 
+```json
 {
-  "name": "pikachu"
+    "pokemons": ["pikachu", "snorlax", "Medcham", "Porygon "]
 }
+```
 
 **Example Response**
 
+```json
+{
+    "data": [
+        {
+            "pokemon": "pikachu",
+            "message": "Pokemon pikachu is banned"
+        },
+        {
+            "name": "snorlax",
+            "height": 21,
+            "weight": 4600
+        },
+        {
+            "name": "medcham",
+            "error": "Pokemon not found"
+        },
+        {
+            "name": "porygon",
+            "height": 8,
+            "weight": 365
+        }
+    ]
+}
+```
 ---
