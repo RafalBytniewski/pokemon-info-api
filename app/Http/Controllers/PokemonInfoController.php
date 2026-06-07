@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\BannedPokemon;
+use App\Models\PokemonInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+
+use function PHPUnit\Framework\isEmpty;
 
 class PokemonInfoController extends Controller
 {
@@ -28,6 +31,7 @@ class PokemonInfoController extends Controller
                 ];
                 continue;
             }
+
             $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$pokemonName}");
 
             if ($response->failed()) {
@@ -50,5 +54,39 @@ class PokemonInfoController extends Controller
         return response()->json([
             'data' => $result,
         ]);
+    }
+
+    public function store(Request $request){
+        $validated = $request->validate([
+            'name' => ['string', 'required'],
+            'height' => ['integer', 'required', 'min:1'],
+            'weight' => ['integer', 'required', 'min:1']
+        ]);
+
+        $name = strtolower($request->input('name'));
+        $validated['name'] = $name;
+
+        if(PokemonInfo::where('name', $name)->exists()){
+            return response()->json([
+                'message' => 'Pokemon already exists in database'
+            ],409);
+        }
+        $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$name}");
+        if($response->ok()){
+            return response()->json([
+                'message' => 'Pokemon already exists in PokeAPI'
+            ], 409);
+        }
+
+        if(!$response->notFound()){
+            return response()->json([
+                'message' => 'Server error'
+            ], 503);
+        }
+
+        PokemonInfo::create($validated);
+        return response()->json([
+            'message' => 'Pokemon added'
+        ],201);
     }
 }
