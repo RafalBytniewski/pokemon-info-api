@@ -32,6 +32,17 @@ class PokemonInfoController extends Controller
                 continue;
             }
 
+            $dbPokemons = PokemonInfo::get();
+            if ($dbPokemons->isNotEmpty()) {
+                foreach ($dbPokemons as $dbPokemon) {
+                    $result[] = [
+                        'name' => $dbPokemon->name,
+                        'height' => $dbPokemon->height,
+                        'weight' => $dbPokemon->weight,
+                        'source' => 'database'
+                    ];
+                }
+            }
             $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$pokemonName}");
 
             if ($response->failed()) {
@@ -48,6 +59,7 @@ class PokemonInfoController extends Controller
                 'name' => $pokemon['name'],
                 'height' => $pokemon['height'],
                 'weight' => $pokemon['weight'],
+                'source' => 'PokeAPI'
             ];
         }
 
@@ -55,8 +67,18 @@ class PokemonInfoController extends Controller
             'data' => $result,
         ]);
     }
+    public function show(int $id)
+    {
+        $pokemon = PokemonInfo::findOrFail($id);
 
-    public function store(Request $request){
+        return response()->json([
+            'name' => $pokemon->name,
+            'height' => $pokemon->height,
+            'weight' => $pokemon->weight
+        ]);
+    }
+    public function store(Request $request)
+    {
         $validated = $request->validate([
             'name' => ['string', 'required'],
             'height' => ['integer', 'required', 'min:1'],
@@ -66,19 +88,19 @@ class PokemonInfoController extends Controller
         $name = strtolower($request->input('name'));
         $validated['name'] = $name;
 
-        if(PokemonInfo::where('name', $name)->exists()){
+        if (PokemonInfo::where('name', $name)->exists()) {
             return response()->json([
                 'message' => 'Pokemon already exists in database'
-            ],409);
+            ], 409);
         }
         $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$name}");
-        if($response->ok()){
+        if ($response->ok()) {
             return response()->json([
                 'message' => 'Pokemon already exists in PokeAPI'
             ], 409);
         }
 
-        if(!$response->notFound()){
+        if (!$response->notFound()) {
             return response()->json([
                 'message' => 'Server error'
             ], 503);
@@ -87,6 +109,35 @@ class PokemonInfoController extends Controller
         PokemonInfo::create($validated);
         return response()->json([
             'message' => 'Pokemon added'
+        ], 201);
+    }
+    public function destroy($id)
+    {
+        $pokemon = PokemonInfo::findOrFail($id);
+        $pokemon->delete();
+
+        return response()->json([
+            'message' => 'Pokemon succesfully deleted'
+        ], 200);
+    }
+    public function update(Request $request, int $id){
+        $pokemon = PokemonInfo::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['string'],
+            'height' => ['integer', 'min:1',],
+            'weight' => ['integer', 'min:1',]
+        ]);
+        
+        if (isset($validated['name'])) {
+            $validated['name'] = strtolower($validated['name']);
+        }
+
+        $pokemon->update($validated);
+
+        return response()->json([
+            'message'=>'Updated succesfully',
+            'data'=> $pokemon
         ],201);
     }
 }
