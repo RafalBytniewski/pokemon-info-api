@@ -108,7 +108,7 @@ class PokemonInfoController extends Controller
 
         PokemonInfo::create($validated);
         return response()->json([
-            'message' => 'Pokemon added'
+            'message' => 'Added successfully'
         ], 201);
     }
     public function destroy($id)
@@ -117,7 +117,7 @@ class PokemonInfoController extends Controller
         $pokemon->delete();
 
         return response()->json([
-            'message' => 'Pokemon succesfully deleted'
+            'message' => 'Deleted successfully'
         ], 200);
     }
     public function update(Request $request, int $id){

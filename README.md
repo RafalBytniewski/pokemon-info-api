@@ -198,9 +198,10 @@ DELETE /banned
 ```
 
 **Headers**
-
+```txt
 - X-SUPER-SECRET-KEY: your_secret_key
 - Content-Type: application/json
+```
 
 **Body**
 
@@ -226,9 +227,10 @@ GET /pokemon
 ```
 
 **Headers**
-
+```txt
 - X-SUPER-SECRET-KEY: your_secret_key
 - Content-Type: application/json
+```
 
 **Body**
 
@@ -262,6 +264,132 @@ GET /pokemon
             "weight": 365
         }
     ]
+}
+```
+
+#### Create pokemon
+
+**Request**
+```txt
+POST /pokemon
+```
+
+**Headers**
+```txt
+- X-SUPER-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+```
+
+**Body**
+
+```json
+{
+    "name": "Andrzej",
+    "height": 160,
+    "weight": 52
+}
+```
+
+**Example Response**
+
+```json
+{
+    "message": "Added successfully"
+}
+```
+
+#### Show pokemon
+
+**Request**
+```txt
+GET /pokemon/{id}
+```
+
+**Headers**
+```txt
+- X-SUPER-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+```
+
+**Body**
+
+```json
+
+```
+
+**Example Response**
+
+```json
+{
+    "name": "andrzej",
+    "height": 162,
+    "weight": 52
+}
+```
+
+#### Update pokemon
+
+**Request**
+```txt
+PUT /pokemon/{id}
+```
+
+**Headers**
+```txt
+- X-SUPER-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+```
+
+**Body**
+
+```json
+{
+    "name": "Andrzejek",
+    "height": 144,
+    "weight": 52
+}
+```
+
+**Example Response**
+
+```json
+{
+    "message": "Updated succesfully",
+    "data": {
+        "id": 3,
+        "name": "andrzejek",
+        "height": 144,
+        "weight": 52,
+        "created_at": "2026-06-07T09:38:45.000000Z",
+        "updated_at": "2026-06-07T12:26:23.000000Z"
+    }
+}
+```
+
+#### Delete pokemon
+
+**Request**
+```txt
+DELETE /pokemon/{id}
+```
+
+**Headers**
+```txt
+- X-SUPER-SECRET-KEY: your_secret_key
+- Content-Type: application/json
+```
+
+**Body**
+
+```json
+
+```
+
+**Example Response**
+
+```json
+{
+    "message": "Deleted successfully"
 }
 ```
 ---
